@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Expense } from '../expense';
 import { EXPENSES } from '../expenses-mock';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import {formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-expenses',
@@ -9,8 +11,24 @@ import { EXPENSES } from '../expenses-mock';
 })
 export class ExpensesComponent implements OnInit {
   expenses = EXPENSES;
+  show = false;
+  addExpenseForm: FormGroup;
 
-  constructor() { }
+  now = new Date();
+  today = '';
+
+  constructor(private fb: FormBuilder) {
+    this.today = formatDate(this.now, 'yyyy-MM-dd', 'en-US', '');
+    this.createForm();
+  }
+
+  createForm() {
+    this.addExpenseForm = this.fb.group({
+      expenseDate: this.today,
+      expenseAmount: ['', Validators.required ],
+      expenseConcept: ['', Validators.required ]
+    });
+  }
 
   ngOnInit() {
   }
@@ -21,4 +39,24 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
+  toggleForm() {
+    this.show = !this.show;
+
+    if (this.show) {
+      this.createForm();
+    } else {
+      this.addExpenseForm.reset();
+    }
+  }
+
+  cancel() {
+    this.toggleForm();
+  }
+
+  onSubmit(customerData) {
+    if (this.addExpenseForm.valid) {
+      console.log('Your amount has been added!! :)', customerData);
+      this.toggleForm();
+    }
+  }
 }
