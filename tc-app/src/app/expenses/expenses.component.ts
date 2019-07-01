@@ -33,12 +33,6 @@ export class ExpensesComponent implements OnInit {
   ngOnInit() {
   }
 
-  get sortData() {
-    return this.expenses.sort((a, b) => {
-      return <any>new Date(b.date) - <any>new Date(a.date);
-    });
-  }
-
   toggleForm() {
     this.show = !this.show;
 
@@ -53,10 +47,29 @@ export class ExpensesComponent implements OnInit {
     this.toggleForm();
   }
 
-  onSubmit(customerData) {
-    if (this.addExpenseForm.valid) {
-      console.log('Your amount has been added!! :)', customerData);
+  get sortData() {
+    return this.expenses.sort((a, b) => {
+      return <any>new Date(b.date) - <any>new Date(a.date);
+    });
+  }
+  get expConcept() { return this.addExpenseForm.get('expenseConcept'); }
+  get expAmount() { return this.addExpenseForm.get('expenseAmount'); }
+  get expDate() { return this.addExpenseForm.get('expenseDate'); }
+
+  onSubmit() {
+    if (this.addExpenseForm.invalid) {
+      return alert('Algo ha ido mal...');
+    } else {
+      const newAmount: any = [{
+          name: this.expConcept.value,
+          money: this.expAmount.value,
+          date: this.expDate.value || this.today
+      }];
+
+      this.sortData.push(newAmount[0]);
+
       this.toggleForm();
     }
   }
+
 }
