@@ -14,6 +14,7 @@ export class ExpensesComponent implements OnInit {
   show = false;
   addExpenseForm: FormGroup;
 
+  // Date variables
   now = new Date();
   today = '';
 
@@ -22,6 +23,7 @@ export class ExpensesComponent implements OnInit {
     this.createForm();
   }
 
+  // Create Form
   createForm() {
     this.addExpenseForm = this.fb.group({
       expenseDate: this.today,
@@ -33,6 +35,7 @@ export class ExpensesComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Button to add a new expense
   toggleForm() {
     this.show = !this.show;
 
@@ -47,6 +50,7 @@ export class ExpensesComponent implements OnInit {
     this.toggleForm();
   }
 
+  // Get info from form
   get sortData() {
     return this.expenses.sort((a, b) => {
       return <any>new Date(b.date) - <any>new Date(a.date);
@@ -56,6 +60,7 @@ export class ExpensesComponent implements OnInit {
   get expAmount() { return this.addExpenseForm.get('expenseAmount'); }
   get expDate() { return this.addExpenseForm.get('expenseDate'); }
 
+  // Submit button
   onSubmit() {
     if (this.addExpenseForm.invalid) {
       return alert('Algo ha ido mal...');
@@ -66,6 +71,7 @@ export class ExpensesComponent implements OnInit {
           date: this.expDate.value || this.today
       }];
 
+      // Add new item in SortData
       this.sortData.push(newAmount[0]);
 
       this.toggleForm();
